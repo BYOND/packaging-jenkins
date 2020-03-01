@@ -101,7 +101,7 @@ spec:
     spec:
       initContainers:
         - name: copy-scripts
-          image: byond/packaging-jenkins-config:v3
+          image: byond/packaging-jenkins-config:v4
           volumeMounts:
             - name: jenkins-scripts
               mountPath: /usr/share/jenkins/ref
