@@ -1,0 +1,2 @@
+git:latest
+kubernetes:latest
