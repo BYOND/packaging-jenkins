@@ -101,7 +101,13 @@ spec:
     spec:
       initContainers:
         - name: copy-scripts
-          image: byond/packaging-jenkins-config:v4
+          image: byond/packaging-jenkins-config:v5
+          env:
+            - name: JENKINS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-admin-account
+                  key: password
           volumeMounts:
             - name: jenkins-scripts
               mountPath: /usr/share/jenkins/ref
