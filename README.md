@@ -8,6 +8,7 @@ To deploy the service or update it, you need to have `kubectl` available configu
 -   The cluster has a default [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) available.
 -   The cluster has an [IngressController](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 -   The hostname routes to the the node(s) the IngressController is running on.
+
 Assuming these prerequisites are met, then you can create/update the Jenkins instance by running `kubectl apply -k .` from the `jenkins.byondlabs.io` folder, or your kustomized overlay folder. For this overlay, it assumes the following:
 -   The cluster has [cert-manager](https://github.com/jetstack/cert-manager) with configuration for `letsencrypt-prod`.
 -   The hostname `jenkins.byondlabs.io` routes to the the node(s) the IngressController is running on.
