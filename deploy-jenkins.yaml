@@ -82,6 +82,50 @@ spec:
               servicePort: 8080
 
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: read-secrets
+  namespace: jenkins
+  labels:
+    app: jenkins
+rules:
+  - apiGroups:
+    - ''
+    resources:
+      - secrets
+    verbs:
+      - get
+      - watch
+      - list
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-read-secrets
+  namespace: jenkins
+  labels:
+    app: jenkins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: read-secrets
+subjects:
+  - kind: ServiceAccount
+    name: jenkins
+    namespace: jenkins
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -101,13 +145,7 @@ spec:
     spec:
       initContainers:
         - name: copy-scripts
-          image: byond/packaging-jenkins-config:v5
-          env:
-            - name: JENKINS_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: jenkins-admin-account
-                  key: password
+          image: byond/packaging-jenkins-config:v11
           volumeMounts:
             - name: jenkins-scripts
               mountPath: /usr/share/jenkins/ref
@@ -122,10 +160,17 @@ spec:
               mountPath: /var/jenkins_home
             - name: jenkins-scripts
               mountPath: /usr/share/jenkins/ref
+          env:
+            - name: JENKINS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-admin-account
+                  key: password
           command: ["/bin/bash", "-c"]
-          args: ["/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -- /usr/local/bin/jenkins.sh"]
+          args: ["/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
       securityContext:
         fsGroup: 1000
+      serviceAccountName: jenkins
       volumes:
         - name: jenkins-home
           persistentVolumeClaim:
