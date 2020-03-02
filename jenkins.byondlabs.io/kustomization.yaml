@@ -1,0 +1,8 @@
+namespace: jenkins
+bases:
+  - ../base
+resources:
+  - pvcs.yaml
+patches:
+  - ingresses.yaml
+  - deployments.yaml

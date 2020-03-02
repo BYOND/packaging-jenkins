@@ -1,0 +1,10 @@
+commonLabels:
+  app: jenkins
+resources:
+  - service-accounts.yaml
+  - roles.yaml
+  - role-bindings.yaml
+  - pvcs.yaml
+  - services.yaml
+  - ingresses.yaml
+  - deployments.yaml

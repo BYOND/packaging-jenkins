@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: copy-scripts
+          image: byond/packaging-jenkins-config:v10
+          volumeMounts:
+            - name: jenkins-scripts
+              mountPath: /usr/share/jenkins/ref
+      containers:
+        - name: jenkins
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: jenkins-scripts
+              mountPath: /usr/share/jenkins/ref
+          env:
+            - name: JENKINS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jenkins-admin-account
+                  key: password
+          command: ["/bin/bash", "-c"]
+          args: ["/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
+      volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-home
+        - name: jenkins-scripts
+          persistentVolumeClaim:
+            claimName: jenkins-scripts
