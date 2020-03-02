@@ -1,2 +1,4 @@
 git:latest
+github-branch-source:latest
 kubernetes:latest
+kubernetes-credentials-provider:latest
