@@ -18,14 +18,12 @@ kind: Role
 metadata:
   name: manage-pods
 rules:
-  - apiGroups:
-    - ''
-    resources:
-      - pods
-    verbs:
-      - create
-      - delete
-      - get
-      - watch
-      - list
-      - exec
+ - apiGroups: [""]
+   resources: ["pods"]
+   verbs: ["create","delete","get","list","patch","update","watch"]
+ - apiGroups: [""]
+   resources: ["pods/exec"]
+   verbs: ["create","delete","get","list","patch","update","watch"]
+ - apiGroups: [""]
+   resources: ["pods/log"]
+   verbs: ["get","list","watch"]
