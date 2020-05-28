@@ -4,6 +4,7 @@ metadata:
   name: jenkins
 spec:
   replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: jenkins
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: jenkins/jenkins:2.230
+          image: jenkins/jenkins:2.238
           ports:
             - containerPort: 8080
             - containerPort: 50000
