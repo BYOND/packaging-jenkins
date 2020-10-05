@@ -24,6 +24,8 @@ spec:
                 secretKeyRef:
                   name: jenkins-admin-account
                   key: password
+            - name: JAVA_OPTS
+              value: "-Dhudson.TcpSlaveAgentListener.hostName=jenkins"
           command: ["/bin/bash", "-c"]
           args: ["/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt; /sbin/tini -s -- /usr/local/bin/jenkins.sh"]
       volumes:
